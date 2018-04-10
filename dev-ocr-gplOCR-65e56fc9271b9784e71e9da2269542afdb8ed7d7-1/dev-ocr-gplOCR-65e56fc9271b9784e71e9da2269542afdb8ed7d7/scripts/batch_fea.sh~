@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# This function is intended to extract a new set of features 
+
+orginalFeaturesDir=/media/kompalli/Windows8_OS/surya/work/cmu/course_planning/my_class_material/student_projects/davy/codesOCR_SPF/char_image_data/char_test_train/core/training_data/
+newFeaturesDir=/tmp/t/new_feat/
+rm /tmp/t/errors;
+if [ 1 -eq 1 ]
+    then
+    for feature_types in cpp_grad_feat
+      do 
+      mkdir -p $newFeaturesDir/$feature_types
+      for class in `ls $orginalFeaturesDir/`
+	do
+	echo "  $feature_types  $class"
+	
+	  inputFile=$orginalFeaturesDir/$class/images_$class 
+	  ls $orginalFeaturesDir/$class/*tiff > $inputFile
+	  if [ -e $inputFile ]
+	      then
+	      featuresFile=$newFeaturesDir/$class"_gradient_feat"
+	      ./gplOCR extractSobelBatch /tmp/t/ $inputFile $orginalFeaturesDir $featuresFile >> /tmp/t/errors
+	      echo "`date` Done $feature_types $class/"
+	      continue
+	  fi
+	  echo "$inputFile Does not exist"
+      done
+    done
+fi
